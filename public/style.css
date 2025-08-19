@@ -19,9 +19,7 @@ body {
   width: 400px;
 }
 
-h1,h2 {
-  margin-bottom: 20px;
-}
+h1,h2 { margin-bottom: 20px; }
 
 input {
   padding: 10px;
@@ -44,19 +42,11 @@ input {
   transition: transform 0.2s;
 }
 
-.btn:hover {
-  transform: scale(1.05);
-}
+.btn:hover { transform: scale(1.05); }
 
-.reset {
-  background: #b40000;
-  color: #fff;
-}
+.reset { background: #b40000; color: #fff; }
 
-.stats {
-  margin-top: 20px;
-  font-size: 18px;
-}
+.stats { margin-top: 20px; font-size: 18px; }
 
 #emojiContainer {
   position: relative;
