@@ -6,29 +6,21 @@ const sound = document.getElementById("shapalaxSound");
 const amountInput = document.getElementById("amountInput");
 const loginNotice = document.getElementById("loginNotice");
 
-let loggedIn = localStorage.getItem("shapalaxLogin") === "true";
+let loggedIn = localStorage.getItem("shapalaxLogin")==="true";
 
-if(!loggedIn){
-  loginNotice.style.display = "block";
-}
+if(!loggedIn) loginNotice.style.display="block";
 
 // Günlük istatistikleri çek
 function loadStats(){
   fetch("/api/stats")
-  .then(res => res.json())
-  .then(data => {
-    counterEl.textContent = data.total;
-  });
+  .then(res=>res.json())
+  .then(data=>{ counterEl.textContent = data.total; });
 }
-
 loadStats();
 
 // Şapalax ekle
-shapalaxBtn.addEventListener("click", ()=>{
-  if(!loggedIn){
-    alert("Giriş yapmadan şapalax ekleyemezsiniz!");
-    return;
-  }
+shapalaxBtn.addEventListener("click",()=>{
+  if(!loggedIn){ alert("Giriş yapmadan şapalax ekleyemezsiniz!"); return; }
 
   let amount = Number(amountInput.value) || 1;
 
@@ -37,12 +29,11 @@ shapalaxBtn.addEventListener("click", ()=>{
     headers:{"Content-Type":"application/json"},
     body: JSON.stringify({amount})
   })
-  .then(res => res.json())
-  .then(data => {
+  .then(res=>res.json())
+  .then(data=>{
     counterEl.textContent = data.total;
-    
-    // Ses ve emoji
-    sound.currentTime = 0;
+
+    sound.currentTime=0;
     sound.play();
 
     for(let i=0;i<amount;i++){
@@ -54,23 +45,17 @@ shapalaxBtn.addEventListener("click", ()=>{
       setTimeout(()=>emoji.remove(),2000);
     }
   });
-
-  amountInput.value = "";
+  amountInput.value="";
 });
 
 // Reset butonu
 resetBtn.addEventListener("click",()=>{
-  if(!loggedIn){
-    alert("Giriş yapmadan reset yapamazsınız!");
-    return;
-  }
+  if(!loggedIn){ alert("Giriş yapmadan reset yapamazsınız!"); return; }
   fetch("/api/add",{
     method:"POST",
     headers:{"Content-Type":"application/json"},
-    body: JSON.stringify({amount: -Number(counterEl.textContent)})
+    body: JSON.stringify({amount:-Number(counterEl.textContent)})
   })
   .then(res=>res.json())
-  .then(data=>{
-    counterEl.textContent = data.total;
-  });
+  .then(data=>{ counterEl.textContent = data.total; });
 });
