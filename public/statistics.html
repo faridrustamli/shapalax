@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Şapalax İstatistikleri</title>
+  <style>
+    body { font-family: Arial; margin: 40px; }
+    h1 { text-align: center; }
+    table { width: 60%; margin: auto; border-collapse: collapse; }
+    th, td { border: 1px solid #333; padding: 10px; text-align: center; }
+    th { background: #444; color: white; }
+  </style>
+</head>
+<body>
+  <h1>📊 Günlük Şapalax İstatistikleri</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Tarih</th>
+        <th>Çalınma Sayısı</th>
+      </tr>
+    </thead>
+    <tbody id="statsBody"></tbody>
+  </table>
+
+  <script>
+    async function loadStats() {
+      let res = await fetch("/api/stats");
+      let stats = await res.json();
+      let tbody = document.getElementById("statsBody");
+      tbody.innerHTML = "";
+
+      Object.keys(stats).forEach(date => {
+        let row = `<tr><td>${date}</td><td>${stats[date]}</td></tr>`;
+        tbody.innerHTML += row;
+      });
+    }
+    loadStats();
+  </script>
+</body>
+</html>
