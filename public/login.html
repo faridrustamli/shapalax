@@ -1,21 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
   <meta charset="UTF-8">
   <title>Login</title>
-  <style>
-    body { font-family: Arial; text-align: center; margin-top: 100px; }
-    input, button { padding: 10px; margin: 5px; border-radius: 5px; }
-    button { background: #28a745; color: white; border: none; cursor: pointer; }
-    button:hover { background: #218838; }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Login Sayfası</h1>
-  <form>
-    <input type="text" placeholder="Kullanıcı Adı"><br>
-    <input type="password" placeholder="Şifre"><br>
-    <button type="button" onclick="alert('Login sistemi daha yapılmadı 😅')">Login</button>
-  </form>
+  <div class="container">
+    <h1>🔑 Giriş Yap</h1>
+    <form method="POST" action="/login">
+      <input type="text" name="username" placeholder="Kullanıcı Adı" required>
+      <input type="password" name="password" placeholder="Şifre" required>
+      <button type="submit">Login</button>
+    </form>
+  </div>
 </body>
 </html>
