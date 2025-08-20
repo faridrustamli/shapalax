@@ -1,42 +1,21 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login - Şapalax</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <style>
+    body { font-family: Arial; text-align: center; margin-top: 100px; }
+    input, button { padding: 10px; margin: 5px; border-radius: 5px; }
+    button { background: #28a745; color: white; border: none; cursor: pointer; }
+    button:hover { background: #218838; }
+  </style>
 </head>
 <body>
-<div class="container">
-  <h2>Şapalax Login</h2>
-  <input type="password" id="password" placeholder="Şifreyi girin">
-  <button id="loginBtn" class="btn">Giriş</button>
-  <p id="msg" style="color:red;"></p>
-
-  <div class="stats">
-    <p>Toplam Şapalax: <span id="counter">0</span></p>
-  </div>
-</div>
-
-<script>
-const loginBtn = document.getElementById("loginBtn");
-const msg = document.getElementById("msg");
-const counterEl = document.getElementById("counter");
-const PASSWORD = "5121"; // Şifre
-
-// İstatistik çek
-fetch("/api/stats")
-.then(res=>res.json())
-.then(data=>{ counterEl.textContent = data.total; });
-
-// Login kontrol
-loginBtn.addEventListener("click",()=>{
-  const pass = document.getElementById("password").value;
-  if(pass === PASSWORD){
-    localStorage.setItem("shapalaxLogin","true");
-    window.location.href="index.html";
-  } else { msg.textContent="Şifre yanlış!"; }
-});
-</script>
+  <h1>Login Sayfası</h1>
+  <form>
+    <input type="text" placeholder="Kullanıcı Adı"><br>
+    <input type="password" placeholder="Şifre"><br>
+    <button type="button" onclick="alert('Login sistemi daha yapılmadı 😅')">Login</button>
+  </form>
 </body>
 </html>
