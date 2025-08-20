@@ -1,53 +1,63 @@
 const express = require("express");
+const session = require("express-session");
+const bodyParser = require("body-parser");
 const path = require("path");
-const fs = require("fs");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// stats.json dosyası
-const statsFile = path.join(__dirname, "stats.json");
+// Session ayarı
+app.use(session({
+  secret: "supersecretshapalax",
+  resave: false,
+  saveUninitialized: true
+}));
 
-// Eğer yoksa boş oluştur
-if (!fs.existsSync(statsFile)) {
-  fs.writeFileSync(statsFile, JSON.stringify({}), "utf8");
-}
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.static(path.join(__dirname, "public")));
 
-app.use(express.static("public"));
-app.use(express.urlencoded({ extended: true }));
+// Günlük istatistik
+let dailyStats = {};
 
-// Ana sayfa (butonlu şapalax)
+// Basınca istatistik ekleme
+app.post("/shapalax", (req, res) => {
+  if (!req.session.loggedIn) {
+    return res.status(403).json({ error: "Login gerekli!" });
+  }
+  const today = new Date().toISOString().split("T")[0];
+  if (!dailyStats[today]) dailyStats[today] = 0;
+  dailyStats[today]++;
+  res.json({ success: true, count: dailyStats[today] });
+});
+
+// İstatistik endpoint
+app.get("/stats", (req, res) => {
+  res.json(dailyStats);
+});
+
+// Login
+app.post("/login", (req, res) => {
+  const { username, password } = req.body;
+  if (username === "admin" && password === "1234") {
+    req.session.loggedIn = true;
+    return res.redirect("/");
+  }
+  res.send("Yanlış giriş! <a href='/login.html'>Tekrar dene</a>");
+});
+
+// Logout
+app.get("/logout", (req, res) => {
+  req.session.destroy(() => res.redirect("/"));
+});
+
+// Ana sayfa yönlendirme
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  if (req.session.loggedIn) {
+    res.sendFile(path.join(__dirname, "public", "index.html"));
+  } else {
+    res.sendFile(path.join(__dirname, "public", "guest.html"));
+  }
 });
 
-// Login sayfası
-app.get("/login", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "login.html"));
-});
-
-// İstatistik sayfası
-app.get("/statistics", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "statistics.html"));
-});
-
-// API: Şapalax çalındığında güncelle
-app.post("/api/shapalax", (req, res) => {
-  let stats = JSON.parse(fs.readFileSync(statsFile, "utf8"));
-  let today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
-
-  if (!stats[today]) stats[today] = 0;
-  stats[today]++;
-
-  fs.writeFileSync(statsFile, JSON.stringify(stats, null, 2), "utf8");
-  res.json({ success: true, today, count: stats[today] });
-});
-
-// API: İstatistikleri getir
-app.get("/api/stats", (req, res) => {
-  let stats = JSON.parse(fs.readFileSync(statsFile, "utf8"));
-  res.json(stats);
-});
-
-// Server başlat
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`✅ Server ${PORT} portunda çalışıyor`));
