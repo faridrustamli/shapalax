@@ -1,35 +1,26 @@
 <!DOCTYPE html>
-<script>
-if(localStorage.getItem("shapalaxLogin") !== "true"){
-    window.location.href = "login.html";
-}
-</script>
-<html lang="tr">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Şapalax!</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Shapalax</title>
+  <style>
+    body { font-family: Arial; text-align: center; margin-top: 50px; }
+    button { padding: 15px 30px; font-size: 20px; border-radius: 10px; cursor: pointer; background: #ff5733; color: white; border: none; }
+    button:hover { background: #c70039; }
+  </style>
 </head>
 <body>
-<div class="container">
-  <h1>Şapalax 🎉</h1>
-  
-  <div id="loginNotice" style="display:none; color:red; margin-bottom:10px;">
-    Giriş yapmadan şapalax ekleyemezsiniz.
-  </div>
-  
-  <input type="number" id="amountInput" placeholder="Kaç şapalax ekleyeceksiniz?" min="1">
-  <button id="shapalaxBtn" class="btn">Şapalax!</button>
-  <button id="resetBtn" class="btn reset">Reset</button>
+  <h1>Shapalax 🎵</h1>
+  <button id="playBtn">Shapalax Çal</button>
 
-  <div class="stats">
-    <p>Toplam Şapalax: <span id="counter">0</span></p>
-  </div>
-  <div id="emojiContainer"></div>
-</div>
+  <audio id="shapalaxAudio" src="shapalax1.mp3"></audio>
 
-<audio id="shapalaxSound" src="shapalax.mp3"></audio>
-<script src="script.js"></script>
+  <script>
+    document.getElementById("playBtn").addEventListener("click", async () => {
+      document.getElementById("shapalaxAudio").play();
+
+      await fetch("/api/shapalax", { method: "POST" });
+    });
+  </script>
 </body>
 </html>
